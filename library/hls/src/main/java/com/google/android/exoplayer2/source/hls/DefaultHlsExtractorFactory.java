@@ -124,7 +124,13 @@ public final class DefaultHlsExtractorFactory implements HlsExtractorFactory {
       if (sniffQuietly(extractor, extractorInput)) {
         return new BundledHlsMediaChunkExtractor(extractor, format, timestampAdjuster);
       }
-      if (fileType == FileTypes.TS) {
+      if (fallBackExtractor == null
+          && (fileType == formatInferredFileType
+          || fileType == responseHeadersInferredFileType
+          || fileType == uriInferredFileType
+          || fileType == FileTypes.TS)) {
+        // If sniffing fails, fallback to the file types inferred from context. If all else fails,
+        // fallback to Transport Stream. See https://github.com/google/ExoPlayer/issues/8219.
         fallBackExtractor = extractor;
       }
     }
