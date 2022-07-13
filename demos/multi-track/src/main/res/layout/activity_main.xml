@@ -7,13 +7,21 @@
   tools:context=".MainActivity">
 
   <Button
-    android:id="@+id/btn_multi_player"
-    android:layout_width="wrap_content"
+    android:id="@+id/btn_multi_music"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:text="多播放器实例"
-    app:layout_constraintBottom_toBottomOf="parent"
+    android:text="同时播放多首音乐"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
+
+  <Button
+    android:id="@+id/btn_single_song_list"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="多音轨文件播放"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_multi_music" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

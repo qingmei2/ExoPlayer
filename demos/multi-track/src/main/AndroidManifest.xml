@@ -18,7 +18,8 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".MultiPlayerActivity" />
+    <activity android:name=".MultiMusicActivity" />
+    <activity android:name=".SimpleMultiTrackActivity" />
   </application>
 
 </manifest>
