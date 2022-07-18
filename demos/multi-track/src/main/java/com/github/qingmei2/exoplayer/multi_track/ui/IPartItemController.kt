@@ -60,6 +60,8 @@ class SinglePartItemController(context: Context,
                             switchCallback: OnTrackSwitchChangedCallback) {
         this.mDurationCallback = durationCallback
         this.mSwitchChangedCallback = switchCallback
+
+        startTimer()
     }
 
     override fun setTrackOpen(isOpen: Boolean) {
@@ -74,7 +76,7 @@ class SinglePartItemController(context: Context,
     }
 
     override fun isTrackOpen(): Boolean {
-        return mExoPlayer.isPlaying
+        return isTrackOpen
     }
 
     override fun onSeek(@IntRange(from = 0, to = 100) progress: Int, byUser: Boolean) {
@@ -104,8 +106,10 @@ class SinglePartItemController(context: Context,
             scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     mHandler.post {
-                        val targetProgress = 100.0f * mExoPlayer.currentPosition / mExoPlayer.duration
-                        mDurationCallback?.invoke(targetProgress)
+                        if (mExoPlayer.isPlaying) {
+                            val targetProgress = 100.0f * mExoPlayer.currentPosition / mExoPlayer.duration
+                            mDurationCallback?.invoke(targetProgress)
+                        }
                     }
                 }
             }, 1000L, 1000L)

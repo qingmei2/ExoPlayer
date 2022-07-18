@@ -92,7 +92,8 @@ class MultiTrackListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         trackSwitch = view.findViewById(R.id.swt_track)
     }
 
-    fun binds(pos: Int, trackItem: SongPartItem, controller: IPartItemController) {
+    fun binds(pos: Int, trackItem: SongPartItem,
+              controller: IPartItemController) {
         val isTrackOpen = controller.isTrackOpen()
         this.onTrackOpenChanged(isTrackOpen)
 
@@ -102,6 +103,8 @@ class MultiTrackListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
         trackSwitch.isChecked = isTrackOpen
 
+        seekbar.progress = 0
+        seekbar.max = 100
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, byUser: Boolean) {
                 controller.onSeek(progress, byUser)
