@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         // 同时播放多首音乐
         findViewById<View>(R.id.btn_multi_music).setOnClickListener(this::onMultiPlayerClicked)
         // 同时播放单曲多个音轨文件
-        findViewById<View>(R.id.btn_single_song_list).setOnClickListener(this::onMultiPlayerClicked)
+        findViewById<View>(R.id.btn_single_song_list).setOnClickListener(this::onSingleSongListClicked)
     }
 
     private fun onMultiPlayerClicked(view: View) {

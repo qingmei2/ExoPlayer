@@ -8,9 +8,9 @@ import com.google.android.exoplayer2.Player
 class SimpleSeekBarListener(private val player: Player) : SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-        if (progress == 0 || seekBar.max == 0) return;
+        if (progress == 0 || seekBar.max == 0) return
         if (fromUser) {
-            player.seekTo(progress * 1000L);
+            player.seekTo(progress * 1000L)
         }
     }
 

@@ -4,37 +4,42 @@
     "singerName": "Lady Gaga",
     "partItems": [
       {
+        "partId": "1",
         "partName": "贝斯",
         "partType": "instrument",
-        "partPath": "media/eh_eh/Bass.wav",
+        "partPath": "asset:///media/eh_eh/Bass.wav",
         "mainType": false,
         "defaultPlay": true
       },
       {
+        "partId": "2",
         "partName": "和声",
         "partType": "harmony",
-        "partPath": "media/eh_eh/BGV.wav",
+        "partPath": "asset:///media/eh_eh/BGV.wav",
         "mainType": false,
         "defaultPlay": true
       },
       {
+        "partId": "3",
         "partName": "鼓音",
         "partType": "instrument",
-        "partPath": "media/eh_eh/Drums.wav",
+        "partPath": "asset:///media/eh_eh/Drums.wav",
         "mainType": false,
         "defaultPlay": true
       },
       {
+        "partId": "4",
         "partName": "背景音",
         "partType": "background",
-        "partPath": "media/eh_eh/Keys.wav",
+        "partPath": "asset:///media/eh_eh/Keys.wav",
         "mainType": false,
         "defaultPlay": true
       },
       {
+        "partId": "5",
         "partName": "歌手",
         "partType": "musician",
-        "partPath": "media/eh_eh/Lead.wav",
+        "partPath": "asset:///media/eh_eh/Lead.wav",
         "mainType": true,
         "defaultPlay": true
       }

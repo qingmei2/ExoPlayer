@@ -1,24 +1,44 @@
 package com.github.qingmei2.exoplayer.multi_track.ui
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.MainThread
+import androidx.collection.ArrayMap
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.qingmei2.exoplayer.multi_track.R
 import com.github.qingmei2.exoplayer.multi_track.entity.SongPartItem
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class MultiTrackListAdapter(
         diffUtil: DiffUtil.ItemCallback<SongPartItem> = MultiTrackListDiffUtil
 ) : ListAdapter<SongPartItem, MultiTrackListViewHolder>(diffUtil) {
 
+    private val mTrackControllers = ArrayMap<Int, IPartItemController>()
+
     @MainThread
     fun bindItems(items: List<SongPartItem>) {
         this.submitList(items)
+    }
+
+    @MainThread
+    fun onClickPlay() {
+        mTrackControllers.forEach { entry ->
+            entry.value.onClickPlay()
+        }
+    }
+
+    @MainThread
+    fun onClickPause() {
+        mTrackControllers.forEach { entry ->
+            entry.value.onClickPause()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiTrackListViewHolder {
@@ -28,7 +48,24 @@ class MultiTrackListAdapter(
     }
 
     override fun onBindViewHolder(holder: MultiTrackListViewHolder, position: Int) {
-        holder.binds(getItem(position))
+        val item = getItem(position)
+        val controller = getTrackController(holder.itemView.context, position, item)
+        holder.binds(position, item, controller)
+    }
+
+    private fun getTrackController(context: Context, pos: Int, item: SongPartItem): IPartItemController {
+        return when (mTrackControllers[pos] == null) {
+            true -> {
+                SinglePartItemController(context, pos, item).also {
+                    mTrackControllers[pos] = it
+                }
+            }
+            false -> mTrackControllers[pos]!!
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount()
     }
 }
 
@@ -45,15 +82,47 @@ private object MultiTrackListDiffUtil : DiffUtil.ItemCallback<SongPartItem>() {
 
 class MultiTrackListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private lateinit var seekbar: SeekBar
-    private lateinit var trackName: TextView
+    private val seekbar: SeekBar
+    private val trackName: TextView
+    private val trackSwitch: SwitchMaterial
 
     init {
         seekbar = view.findViewById(R.id.seek_bar)
         trackName = view.findViewById(R.id.tv_track_name)
+        trackSwitch = view.findViewById(R.id.swt_track)
     }
 
-    fun binds(trackItem: SongPartItem) {
+    fun binds(pos: Int, trackItem: SongPartItem, controller: IPartItemController) {
+        val isTrackOpen = controller.isTrackOpen()
+        this.onTrackOpenChanged(isTrackOpen)
 
+        trackName.text = trackItem.partName
+        trackSwitch.setOnCheckedChangeListener { _, isChecked ->
+            controller.setTrackOpen(isChecked)
+        }
+        trackSwitch.isChecked = isTrackOpen
+
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, byUser: Boolean) {
+                controller.onSeek(progress, byUser)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+            }
+        })
+
+        val durationCallback: OnTrackDurationChangedCallback = { progress ->
+            seekbar.progress = progress.toInt()
+        }
+        val switchCallback: OnTrackSwitchChangedCallback = this::onTrackOpenChanged
+
+        controller.onBindItem(pos, trackItem, durationCallback, switchCallback)
+    }
+
+    private fun onTrackOpenChanged(isTrackOpen: Boolean) {
+        trackName.setTextColor(if (isTrackOpen) Color.BLACK else Color.GRAY)
     }
 }
