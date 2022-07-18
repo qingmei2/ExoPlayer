@@ -1,4 +1,4 @@
-package com.github.qingmei2.exoplayer.multi_track
+package com.github.qingmei2.exoplayer.multi_track.ui
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import com.github.qingmei2.exoplayer.multi_track.R
 import com.github.qingmei2.exoplayer.multi_track.common.SimpleSeekBarListener
 import com.github.qingmei2.exoplayer.multi_track.utils.DemoDataSources
 import com.google.android.exoplayer2.DefaultRenderersFactory

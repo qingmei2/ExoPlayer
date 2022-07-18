@@ -5,8 +5,11 @@ data class SongItem(val songName: String,
                     val partItems: List<SongPartItem>)
 
 
-data class SongPartItem(val partName: String,
-                        val partType: String,
-                        val partPath: String,
-                        val mainType: Boolean,
-                        val defaultPlay: Boolean)
+data class SongPartItem(
+        val partId: String,
+        val partName: String,
+        val partType: String,
+        val partPath: String,
+        val mainType: Boolean,
+        val defaultPlay: Boolean
+)

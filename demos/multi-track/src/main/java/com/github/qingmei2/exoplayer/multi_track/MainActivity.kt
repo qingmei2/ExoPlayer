@@ -3,6 +3,8 @@ package com.github.qingmei2.exoplayer.multi_track
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.github.qingmei2.exoplayer.multi_track.ui.MultiMusicActivity
+import com.github.qingmei2.exoplayer.multi_track.ui.MultiTrackMainActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +23,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onSingleSongListClicked(view: View) {
-        SimpleMultiTrackActivity.launch(this)
+        MultiTrackMainActivity.launch(this)
     }
 }
