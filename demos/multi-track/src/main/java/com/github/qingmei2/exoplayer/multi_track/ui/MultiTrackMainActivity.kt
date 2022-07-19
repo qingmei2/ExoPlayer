@@ -51,7 +51,10 @@ class MultiTrackMainActivity : AppCompatActivity() {
         mListAdapter = MultiTrackListAdapter().apply {
             mRecyclerView.adapter = this
             mRecyclerView.layoutManager = LinearLayoutManager(this@MultiTrackMainActivity)
-            submitList(songItem.partItems)
+
+            lifecycle.addObserver(this)
+
+            bindItems(songItem.partItems)
         }
     }
 }

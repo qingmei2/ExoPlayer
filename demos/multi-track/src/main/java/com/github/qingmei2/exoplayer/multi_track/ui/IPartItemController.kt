@@ -5,17 +5,18 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.IntRange
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.github.qingmei2.exoplayer.multi_track.entity.SongPartItem
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import java.util.*
 
-interface IPartItemController {
+interface IPartItemController : LifecycleEventObserver {
 
-    fun onBindItem(pos: Int, trackItem: SongPartItem,
-                   durationCallback: OnTrackDurationChangedCallback,
-                   switchCallback: OnTrackSwitchChangedCallback)
+    fun onBindItem(pos: Int, trackItem: SongPartItem, switchCallback: OnTrackSwitchChangedCallback)
 
     fun isTrackOpen(): Boolean
 
@@ -28,7 +29,6 @@ interface IPartItemController {
     fun onClickPause()
 }
 
-typealias OnTrackDurationChangedCallback = (Float) -> Unit
 typealias OnTrackSwitchChangedCallback = (Boolean) -> Unit
 
 class SinglePartItemController(context: Context,
@@ -36,10 +36,8 @@ class SinglePartItemController(context: Context,
                                private val item: SongPartItem) : IPartItemController {
 
 
-    private val mExoPlayer: ExoPlayer
+    private val mExoPlayer: SimpleExoPlayer
 
-    private var mTimer: Timer? = null
-    private var mDurationCallback: OnTrackDurationChangedCallback? = null
     private var mSwitchChangedCallback: OnTrackSwitchChangedCallback? = null
 
     private var isTrackOpen: Boolean = true
@@ -56,12 +54,8 @@ class SinglePartItemController(context: Context,
 
     override fun onBindItem(pos: Int,
                             trackItem: SongPartItem,
-                            durationCallback: OnTrackDurationChangedCallback,
                             switchCallback: OnTrackSwitchChangedCallback) {
-        this.mDurationCallback = durationCallback
         this.mSwitchChangedCallback = switchCallback
-
-        startTimer()
     }
 
     override fun setTrackOpen(isOpen: Boolean) {
@@ -80,47 +74,27 @@ class SinglePartItemController(context: Context,
     }
 
     override fun onSeek(@IntRange(from = 0, to = 100) progress: Int, byUser: Boolean) {
-        if (byUser) {
-            val targetMill = mExoPlayer.duration * (progress / 100.0)
-            mExoPlayer.seekTo(targetMill.toLong())
-        }
+        mExoPlayer.volume = progress / 100f
     }
 
     override fun onClickPlay() {
         if (!mExoPlayer.isPlaying) {
             mExoPlayer.play()
-            startTimer()
         }
     }
 
     override fun onClickPause() {
         if (mExoPlayer.isPlaying) {
             mExoPlayer.pause()
-            stopTimer()
         }
     }
 
-    private fun startTimer() {
-        stopTimer()
-        mTimer = Timer().apply {
-            scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    mHandler.post {
-                        if (mExoPlayer.isPlaying) {
-                            val targetProgress = 100.0f * mExoPlayer.currentPosition / mExoPlayer.duration
-                            mDurationCallback?.invoke(targetProgress)
-                        }
-                    }
-                }
-            }, 1000L, 1000L)
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        when (event) {
+            Lifecycle.Event.ON_DESTROY -> {
+                mExoPlayer.stop()
+                mExoPlayer.release()
+            }
         }
-    }
-
-    private fun stopTimer() {
-        mTimer?.apply {
-            cancel()
-            purge()
-        }
-        mTimer = null
     }
 }

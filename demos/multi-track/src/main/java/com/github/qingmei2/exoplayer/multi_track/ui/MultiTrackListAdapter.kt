@@ -9,6 +9,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.collection.ArrayMap
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +21,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 
 class MultiTrackListAdapter(
         diffUtil: DiffUtil.ItemCallback<SongPartItem> = MultiTrackListDiffUtil
-) : ListAdapter<SongPartItem, MultiTrackListViewHolder>(diffUtil) {
+) : ListAdapter<SongPartItem, MultiTrackListViewHolder>(diffUtil), LifecycleEventObserver {
 
     private val mTrackControllers = ArrayMap<Int, IPartItemController>()
 
@@ -64,8 +67,10 @@ class MultiTrackListAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount()
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        mTrackControllers.forEach { entry ->
+            entry.value.onStateChanged(source, event)
+        }
     }
 }
 
@@ -98,12 +103,12 @@ class MultiTrackListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         this.onTrackOpenChanged(isTrackOpen)
 
         trackName.text = trackItem.partName
+        trackSwitch.isChecked = isTrackOpen
         trackSwitch.setOnCheckedChangeListener { _, isChecked ->
             controller.setTrackOpen(isChecked)
         }
-        trackSwitch.isChecked = isTrackOpen
 
-        seekbar.progress = 0
+        seekbar.progress = 100
         seekbar.max = 100
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, byUser: Boolean) {
@@ -117,12 +122,9 @@ class MultiTrackListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
         })
 
-        val durationCallback: OnTrackDurationChangedCallback = { progress ->
-            seekbar.progress = progress.toInt()
-        }
         val switchCallback: OnTrackSwitchChangedCallback = this::onTrackOpenChanged
 
-        controller.onBindItem(pos, trackItem, durationCallback, switchCallback)
+        controller.onBindItem(pos, trackItem, switchCallback)
     }
 
     private fun onTrackOpenChanged(isTrackOpen: Boolean) {
