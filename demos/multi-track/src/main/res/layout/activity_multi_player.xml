@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".MainActivity">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_video_container"
+    android:layout_width="0dp"
+    android:layout_height="300dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+      android:id="@+id/player_view"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:show_shuffle_button="true"
+      app:show_subtitle_button="true" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_audio_track1"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cl_video_container">
+
+    <Button
+      android:id="@+id/tv_play_track1"
+      android:layout_width="200dp"
+      android:layout_height="0dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="8dp"
+      android:text="歌曲名：菊次郎的夏天"
+      app:layout_constraintBottom_toBottomOf="@+id/btn_play_track1"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/btn_play_track1" />
+
+    <Button
+      android:id="@+id/btn_play_track1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="16dp"
+      android:text="播放/暂停"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintLeft_toRightOf="@+id/tv_play_track1"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/seek_bar_01" />
+
+    <SeekBar
+      android:id="@+id/seek_bar_01"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_audio_track2"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cl_audio_track1">
+
+    <Button
+      android:id="@+id/tv_play_track2"
+      android:layout_width="200dp"
+      android:layout_height="0dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="8dp"
+      android:text="歌曲名：月半小夜曲"
+      app:layout_constraintBottom_toBottomOf="@+id/btn_play_track2"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/btn_play_track2" />
+
+    <Button
+      android:id="@+id/btn_play_track2"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="16dp"
+      android:text="播放/暂停"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintLeft_toRightOf="@+id/tv_play_track2"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/seek_bar_02" />
+
+    <SeekBar
+      android:id="@+id/seek_bar_02"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
